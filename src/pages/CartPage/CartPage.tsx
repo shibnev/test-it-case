@@ -29,14 +29,17 @@ export default function CartPage() {
     const fetchCartItems = async () => {
       const itemsData = await Promise.all(cartItems.map(async ({ id, colorID, sizeID }) => {
         const product: IProduct = await getProduct(id) as IProduct;
-        const sizes = await getSize(product.colors[colorID].sizes[sizeID]).then((size) => (size as IProductSize).label);
+        const currentSize = product.colors[colorID].sizes[sizeID]
+        const sizeLabel = currentSize
+          ? await getSize(currentSize).then((size) => (size as IProductSize).label)
+          : 'Size not available';
 
         return {
           images: product.colors[colorID].images,
           name: product.name,
           colorName: product.colors[colorID].name,
           price: Number(product.colors[colorID].price),
-          size: sizes,
+          size: sizeLabel ? sizeLabel : 'Size not available',
           id: id,
           colorID: colorID,
           sizeID: sizeID,
