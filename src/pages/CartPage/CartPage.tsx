@@ -27,26 +27,30 @@ export default function CartPage() {
 
   useEffect(() => {
     const fetchCartItems = async () => {
-      const itemsData = await Promise.all(cartItems.map(async ({ id, colorID, sizeID }) => {
-        const product: IProduct = await getProduct(id) as IProduct;
-        const currentSize = product.colors[colorID].sizes[sizeID]
-        const sizeLabel = currentSize
-          ? await getSize(currentSize).then((size) => (size as IProductSize).label)
-          : 'Size not available';
+      try {
+        const itemsData = await Promise.all(cartItems.map(async ({ id, colorID, sizeID }) => {
+          const product: IProduct = await getProduct(id) as IProduct;
+          const currentSize = product.colors[colorID].sizes[sizeID]
+          const sizeLabel = currentSize
+            ? await getSize(currentSize).then((size) => (size as IProductSize).label)
+            : 'Такого размер нет';
 
-        return {
-          images: product.colors[colorID].images,
-          name: product.name,
-          colorName: product.colors[colorID].name,
-          price: Number(product.colors[colorID].price),
-          size: sizeLabel ? sizeLabel : 'Size not available',
-          id: id,
-          colorID: colorID,
-          sizeID: sizeID,
-        };
-      }));
+          return {
+            images: product.colors[colorID].images,
+            name: product.name,
+            colorName: product.colors[colorID].name,
+            price: Number(product.colors[colorID].price),
+            size: sizeLabel || 'Такого размер нет',
+            id: id,
+            colorID: colorID,
+            sizeID: sizeID,
+          };
+        }));
 
-      setCartItemsData(itemsData);
+        setCartItemsData(itemsData);
+      } catch (error) {
+        console.error('Failed to fetch cart items:', error);
+      }
     };
 
     fetchCartItems();
