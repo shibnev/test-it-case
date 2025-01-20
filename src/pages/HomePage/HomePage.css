@@ -1,0 +1,29 @@
+.home-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-page__list {
+  gap: 10px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.home-page__product {
+  background-color: #b4d0ec;
+  border-radius: 14px;
+  padding: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 900;
+  transition: 0.12s ease;
+}
+
+.home-page__img {
+  object-fit: contain;
+  border-radius: 14px;
+  max-height: 400px;
+}
